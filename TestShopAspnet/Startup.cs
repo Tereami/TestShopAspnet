@@ -23,6 +23,8 @@ namespace TestShopAspnet
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,10 +41,13 @@ namespace TestShopAspnet
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
+                endpoints.MapGet("/mymessage", async context =>
                 {
                     await context.Response.WriteAsync(Configuration["MyMessage"]);
                 });
+
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
         }
     }
