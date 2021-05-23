@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Razor.Runtime;
 
 namespace TestShopAspnet
 {
@@ -23,8 +24,9 @@ namespace TestShopAspnet
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
