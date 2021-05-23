@@ -24,15 +24,16 @@
         <tbody>
             @foreach (TestShopAspnet.Models.Person person in Model)
             {
-            <tr>
-                <td>@person.Id</td>
-                <td>@person.Name</td>
-                <td>@person.Surname</td>
-                <td>@person.Age</td>
-                <td><a href="/main/card/@person.Id">Подробнее</a></td>
-            </tr>
+                <tr>
+                    <td>@person.Id</td>
+                    <td>@person.Name</td>
+                    <td>@person.Surname</td>
+                    <td>@person.Age</td>
+                    <td><a href="/main/card/@person.Id">Подробнее</a></td>
+                </tr>
             }
         </tbody>
     </table>
+    <p><a href="/">&#60;&#60;Main page</a></p>
 </body>
 </html>
