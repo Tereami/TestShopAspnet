@@ -19,7 +19,7 @@ namespace TestShopAspnet.Controllers
 
         public IActionResult Index()
         {
-            return Content("Hello from main controller index action");
+            return View();
         }
 
         public IActionResult Personal()
