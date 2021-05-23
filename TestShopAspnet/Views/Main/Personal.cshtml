@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TestShopAspnet.Models.Person> 
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Сотрудники</title>
+</head>
+<body>
+
+    <h2>Сотрудники магазина</h2>
+    <hr />
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Возраст</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (TestShopAspnet.Models.Person person in Model)
+            {
+                <tr>
+                    <td>@person.Id</td>
+                    <td>@person.Name</td>
+                    <td>@person.Surname</td>
+                    <td>@person.Age</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
