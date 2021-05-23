@@ -12,8 +12,8 @@ namespace TestShopAspnet.Controllers
     {
         private static readonly List<Person> _persons = new List<Person>
         {
-            new Person("Иван", "Иванов", 21),
-            new Person("Пётр", "Петров", 31),
+            new Person("Иван", "Иванов", 21, "Инженер"),
+            new Person("Пётр", "Петров", 31, "Директор"),
             new Person("Сидор", "Сидоров", 41)
         };
 
@@ -33,6 +33,16 @@ namespace TestShopAspnet.Controllers
         public IActionResult Personal()
         {
             return View(_persons);
+        }
+
+        public IActionResult Card(int id)
+        {
+            var checkPers = _persons.Where(i => i.Id == id).ToList();
+            if(checkPers.Count == 0)
+            {
+                throw new Exception("404! User not found");
+            }
+            return View(checkPers.First());
         }
     }
 }

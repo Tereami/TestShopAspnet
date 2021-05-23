@@ -1,0 +1,20 @@
+﻿@model TestShopAspnet.Models.Person;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Информация о сотруднике</title>
+</head>
+<body>
+    <h2>@Model.Surname @Model.Name</h2>
+    <p>
+        Информация о сотруднике:
+        <ul>
+            <li>Возраст: @Model.Age</li>
+            <li>Должность: @Model.Position</li>
+        </ul>
+    </p>
+</body>
+</html>
