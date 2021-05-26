@@ -35,15 +35,14 @@ namespace TestShopAspnet.Controllers
             return View(_persons);
         }
 
-        //Я просто прописываю аргумент в вызове метода, и текст после третьего слеша в url сам становится этим аргументом! чудеса
         public IActionResult Card(int id)
         {
-            var checkPers = _persons.Where(i => i.Id == id).ToList();
-            if(checkPers.Count == 0)
+            Person checkPers = _persons.FirstOrDefault(i => i.Id == id);
+            if(checkPers == null)
             {
                 return new NotFoundResult();
             }
-            return View(checkPers.First());
+            return View(checkPers);
         }
     }
 }

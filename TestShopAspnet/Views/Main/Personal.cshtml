@@ -1,17 +1,10 @@
-﻿@model IEnumerable<TestShopAspnet.Models.Person> 
+﻿@model IEnumerable<TestShopAspnet.Models.Person>
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Сотрудники</title>
-</head>
-<body>
+<div class="container">
 
     <h2>Сотрудники магазина</h2>
     <hr />
-    <table>
+    <table class="table">
         <thead>
             <tr>
                 <th>#</th>
@@ -34,6 +27,5 @@
             }
         </tbody>
     </table>
-    <p><a href="/">&#60;&#60;Main page</a></p>
-</body>
-</html>
+    <p><a asp-controller="Main" asp-action="Index">&#60;&#60;Main page</a></p>
+</div>
