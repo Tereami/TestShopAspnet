@@ -1,13 +1,5 @@
-﻿@model TestShopAspnet.Models.Person;
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Информация о сотруднике</title>
-</head>
-<body>
+﻿
+<div class="container">
     <h2>@Model.Surname @Model.Name</h2>
     <p>
         Информация о сотруднике:
@@ -16,6 +8,6 @@
             <li>Должность: @Model.Position</li>
         </ul>
     </p>
-    <p><a href="/main/personal">&#60;&#60;Back</a></p>
-</body>
-</html>
+    <p><a asp-controller="Main" asp-action="Personal">&#60;&#60;Back</a></p>
+</div>
+
