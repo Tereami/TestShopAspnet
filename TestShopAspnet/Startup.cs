@@ -48,7 +48,7 @@ namespace TestShopAspnet
                     await context.Response.WriteAsync(Configuration["MyMessage"]);
                 });
 
-                endpoints.MapDefaultControllerRoute();
+                //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
         }
