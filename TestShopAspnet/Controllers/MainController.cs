@@ -35,10 +35,20 @@ namespace TestShopAspnet.Controllers
             return View(_persons);
         }
 
-        public IActionResult Card(int id)
+        public IActionResult PersonInfo(int id)
         {
             Person checkPers = _persons.FirstOrDefault(i => i.Id == id);
             if(checkPers == null)
+            {
+                return new NotFoundResult();
+            }
+            return View(checkPers);
+        }
+
+        public IActionResult PersonEdit(int id)
+        {
+            Person checkPers = _persons.FirstOrDefault(i => i.Id == id);
+            if (checkPers == null)
             {
                 return new NotFoundResult();
             }
