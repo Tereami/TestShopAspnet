@@ -9,12 +9,7 @@ namespace TestShopAspnet.Controllers
 {
     public class PersonsController : Controller
     {
-        private static readonly List<Person> _persons = new List<Person>
-        {
-            new Person("Иван", "Иванов", 21, "Инженер"),
-            new Person("Пётр", "Петров", 31, "Директор"),
-            new Person("Сидор", "Сидоров", 41)
-        };
+       
 
 
         public IActionResult Index()
