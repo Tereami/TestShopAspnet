@@ -36,7 +36,7 @@ namespace TestShopAspnet.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            return View("Edit", new PersonViewModel());
         }
 
         public IActionResult Edit(int id)
@@ -60,7 +60,12 @@ namespace TestShopAspnet.Controllers
         {
             Person p = new Person(vm.Name, vm.Surname, vm.Age, vm.Position);
             p.Id = vm.Id;
-            _personsService.Update(p);
+
+            if (p.Id == 0)
+                _personsService.Add(p);
+            else
+                _personsService.Update(p);
+
             return RedirectToAction("Index");
         }
 
