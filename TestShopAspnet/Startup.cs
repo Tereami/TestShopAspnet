@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Runtime;
+using TestShopAspnet.Services.Interfaces;
+using TestShopAspnet.Services;
 
 namespace TestShopAspnet
 {
@@ -24,6 +26,8 @@ namespace TestShopAspnet
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IPersonsData, InMemoryPersonsData>();
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 

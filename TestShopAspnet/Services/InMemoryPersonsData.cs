@@ -54,6 +54,7 @@ namespace TestShopAspnet.Services
             Person dbPers = Get(pers.Id);
             if (dbPers is null) return;
 
+            //этот костыль можно убрать через библиотеку AutoMapper
             dbPers.Name = pers.Name;
             dbPers.Surname = pers.Surname;
             dbPers.Age = pers.Age;
