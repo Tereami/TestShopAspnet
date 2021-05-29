@@ -16,13 +16,6 @@ namespace TestShopAspnet.Services
             new Person("Сидор", "Сидоров", 41)
         };
 
-        private int _CurrentMaxId = -1;
-
-        public InMemoryPersonsData()
-        {
-            _CurrentMaxId = _persons.Max(i => i.Id);
-        }
-
         public Person Get(int id)
         {
             var pers = _persons.SingleOrDefault(p => p.Id == id);
@@ -39,8 +32,7 @@ namespace TestShopAspnet.Services
             if (pers is null) throw new ArgumentNullException(nameof(pers));
 
             if (_persons.Contains(pers)) return pers.Id;
-
-            pers.Id = ++_CurrentMaxId;
+            
             _persons.Add(pers);
             return pers.Id;
         }
