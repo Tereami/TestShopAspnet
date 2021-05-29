@@ -10,12 +10,7 @@ namespace TestShopAspnet.Controllers
 {
     public class MainController : Controller
     {
-        private static readonly List<Person> _persons = new List<Person>
-        {
-            new Person("Иван", "Иванов", 21, "Инженер"),
-            new Person("Пётр", "Петров", 31, "Директор"),
-            new Person("Сидор", "Сидоров", 41)
-        };
+       
 
         private IConfiguration Configuration;
 
@@ -30,30 +25,7 @@ namespace TestShopAspnet.Controllers
             return View();
         }
 
-        public IActionResult Personal()
-        {
-            return View(_persons);
-        }
-
-        public IActionResult PersonInfo(int id)
-        {
-            Person checkPers = _persons.FirstOrDefault(i => i.Id == id);
-            if(checkPers == null)
-            {
-                return new NotFoundResult();
-            }
-            return View(checkPers);
-        }
-
-        public IActionResult PersonEdit(int id)
-        {
-            Person checkPers = _persons.FirstOrDefault(i => i.Id == id);
-            if (checkPers == null)
-            {
-                return new NotFoundResult();
-            }
-            return View(checkPers);
-        }
+       
 
         public IActionResult Blog()
         {

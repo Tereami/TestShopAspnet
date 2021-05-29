@@ -26,10 +26,10 @@
                     <td>@person.Name</td>
                     <td>@person.Surname</td>
                     <td>@person.Age</td>
-                    <td><a asp-controller="Main" asp-action="PersonInfo" asp-route-id="@person.Id">Подробнее</a></td>
+                    <td><a asp-action="Info" asp-route-id="@person.Id">Подробнее</a></td>
                 </tr>
             }
         </tbody>
     </table>
-    <p><a asp-controller="Main" asp-action="Index">&#60;&#60;Main page</a></p>
+    <p><a asp-action="Index">&#60;&#60;Main page</a></p>
 </div>

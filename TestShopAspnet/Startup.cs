@@ -26,7 +26,7 @@ namespace TestShopAspnet
         {
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -38,6 +38,17 @@ namespace TestShopAspnet
 
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.Use(
+              async (context, next) =>
+              {
+                  await next();
+              });
+
+            app.Map("/testmap", opt => opt.Run(async context =>
+            {
+                await Task.Delay(100);
+            }));
 
             app.UseEndpoints(endpoints =>
             {
