@@ -1,17 +1,17 @@
-﻿@model TestShopAspnet.Models.Person
+﻿@model TestShopAspnet.ViewModels.PersonViewModel
 
 @{
-    ViewData["Title"] = "Редактировать сведения {Model.Surname} {Model.Name}";
+    ViewData["Title"] = "Редактирование " + Model.Name;
 }
 
 <div class="container">
-    <h1>@Model.Surname @Model.Name</h1>
+    <h1>Edit</h1>
 
-    <h4>Person</h4>
+    <h4>PersonViewModel</h4>
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="PersonEdit">
+            <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="Id" class="control-label"></label>
@@ -46,6 +46,7 @@
     </div>
 
     <div>
-        <a asp-action="Info" asp-route-id="@Model.Id">Отмена</a>
+        <a asp-action="Index">Отменить</a>
     </div>
 </div>
+
