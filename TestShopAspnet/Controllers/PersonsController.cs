@@ -33,6 +33,11 @@ namespace TestShopAspnet.Controllers
             return View(checkPers);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         public IActionResult Edit(int id)
         {
             Person checkPers = _personsService.Get(id);
@@ -41,6 +46,11 @@ namespace TestShopAspnet.Controllers
                 return new NotFoundResult();
             }
             return View(checkPers);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            return View();
         }
     }
 }
