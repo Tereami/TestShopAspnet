@@ -71,7 +71,27 @@ namespace TestShopAspnet.Controllers
 
         public IActionResult Delete(int id)
         {
-            return View();
+            if (id < 1) return BadRequest();
+            Person checkPers = _personsService.Get(id);
+            if (checkPers is null)
+                return NotFound();
+
+            PersonViewModel persvm = new PersonViewModel()
+            {
+                Id = checkPers.Id,
+                Name = checkPers.Name,
+                Surname = checkPers.Surname,
+                Age = checkPers.Age,
+                Position = checkPers.Position
+            };
+            return View(persvm);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteConfirm(int id)
+        {
+            _personsService.Delete(id);
+            return RedirectToAction("Index");
         }
     }
 }
