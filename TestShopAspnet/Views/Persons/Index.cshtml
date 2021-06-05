@@ -18,6 +18,7 @@
                 <th>Фамилия</th>
                 <th>Возраст</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -29,6 +30,11 @@
                     <td>@person.Surname</td>
                     <td>@person.Age</td>
                     <td><a asp-action="Info" asp-route-id="@person.Id">Подробнее</a></td>
+                    <td>
+                        <form asp-action="DeleteConfirm" asp-route-id="@person.Id">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             }
         </tbody>

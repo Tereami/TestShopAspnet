@@ -58,6 +58,12 @@ namespace TestShopAspnet.Controllers
         [HttpPost]
         public IActionResult Edit(PersonViewModel vm)
         {
+            if (vm.Name == "XXX")
+                ModelState.AddModelError("", "Всё плохо!");
+
+            if(!ModelState.IsValid)
+                return View(vm);
+
             Person p = new Person(vm.Name, vm.Surname, vm.Age, vm.Position);
             p.Id = vm.Id;
 
