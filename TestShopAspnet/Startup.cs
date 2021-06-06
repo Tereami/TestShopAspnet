@@ -28,6 +28,8 @@ namespace TestShopAspnet
         {
             services.AddSingleton<IPersonsData, InMemoryPersonsData>();
 
+            services.AddSingleton<IProductData, InMemoryProductData>();
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
