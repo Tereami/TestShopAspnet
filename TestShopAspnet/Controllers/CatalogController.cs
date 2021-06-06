@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestShopAspnet.Services.Interfaces;
+using DomainModel.Filters;
+using TestShopAspnet.ViewModels;
+using DomainModel.Enitities;
 
 namespace TestShopAspnet.Controllers
 {
@@ -17,9 +20,29 @@ namespace TestShopAspnet.Controllers
         }
 
 
-        public IActionResult Index(int? BrandId, int? SectionId)
+        public IActionResult Index(int? BrandId, int? SectionId, int? Limit)
         {
-            return View();
+            ProductFilter filter = new ProductFilter
+            {
+                BrandId = BrandId,
+                SectionId = SectionId,
+                Limit = Limit
+            };
+
+            IEnumerable<ProductViewModel> products = _service
+                .GetProducts(filter)
+                .Select(i => new ProductViewModel(i));
+
+            CatalogViewModel catVm = new CatalogViewModel
+            {
+                BrandId = BrandId,
+                SectionId = SectionId,
+                Products = products
+            };
+
+            return View(catVm);
         }
+
+        
     }
 }

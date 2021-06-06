@@ -31,7 +31,14 @@ namespace TestShopAspnet.Services
                     products = products.Where(i => i.BrandId == filter.BrandId);
                 if (filter.SectionId != null)
                     products = products.Where(i => i.SectionId == filter.SectionId);
+                if (filter.Limit != null)
+                {
+                    int limit2 = (int)filter.Limit;
+                    products = products.Take(limit2);
+                }
             }
+
+            products = products.OrderBy(i => i.Order);
 
             return products;
         }

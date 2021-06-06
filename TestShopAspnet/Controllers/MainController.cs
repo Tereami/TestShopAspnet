@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestShopAspnet.Models;
+using TestShopAspnet.Services.Interfaces;
+using DomainModel.Filters;
+using TestShopAspnet.ViewModels;
 
 namespace TestShopAspnet.Controllers
 {
@@ -13,16 +16,26 @@ namespace TestShopAspnet.Controllers
        
 
         private IConfiguration Configuration;
+        private IProductData _productsService;
 
-        public MainController(IConfiguration conf)
+        public MainController(IConfiguration conf, IProductData productsService)
         {
             Configuration = conf;
+            _productsService = productsService;
         }
 
 
         public IActionResult Index()
         {
-            return View();
+            ProductFilter filter = new ProductFilter
+            {
+                Limit = 4
+            };
+
+            IEnumerable<ProductViewModel> products = _productsService
+                .GetProducts(filter)
+                .Select(i => new ProductViewModel(i));
+            return View(products);
         }
 
        

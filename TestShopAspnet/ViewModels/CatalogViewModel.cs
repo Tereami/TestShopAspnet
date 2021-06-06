@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using TestShopAspnet.ViewModels;
 
-namespace DomainModel.Filters
+namespace TestShopAspnet.ViewModels
 {
-    public class ProductFilter
+    public class CatalogViewModel
     {
         public int? SectionId { get; set; }
+
         public int? BrandId { get; set; }
-        public int? Limit { get; set; }
+
+        public IEnumerable<ProductViewModel> Products { get; set; }
     }
 }
