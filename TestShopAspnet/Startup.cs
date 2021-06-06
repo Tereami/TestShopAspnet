@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Runtime;
+using TestShopAspnet.Services.Interfaces;
+using TestShopAspnet.Services;
 
 namespace TestShopAspnet
 {
@@ -24,9 +26,13 @@ namespace TestShopAspnet
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IPersonsData, InMemoryPersonsData>();
+
+            services.AddSingleton<IProductData, InMemoryProductData>();
+
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -36,10 +42,19 @@ namespace TestShopAspnet
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
             app.UseRouting();
 
+            app.Use(
+              async (context, next) =>
+              {
+                  await next();
+              });
 
-
+            app.Map("/testmap", opt => opt.Run(async context =>
+            {
+                await Task.Delay(100);
+            }));
 
             app.UseEndpoints(endpoints =>
             {
@@ -48,7 +63,7 @@ namespace TestShopAspnet
                     await context.Response.WriteAsync(Configuration["MyMessage"]);
                 });
 
-                endpoints.MapDefaultControllerRoute();
+                //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
         }

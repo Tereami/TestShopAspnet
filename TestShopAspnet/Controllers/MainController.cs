@@ -5,45 +5,79 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TestShopAspnet.Models;
+using TestShopAspnet.Services.Interfaces;
+using DomainModel.Filters;
+using TestShopAspnet.ViewModels;
 
 namespace TestShopAspnet.Controllers
 {
     public class MainController : Controller
     {
-        private static readonly List<Person> _persons = new List<Person>
-        {
-            new Person("Иван", "Иванов", 21, "Инженер"),
-            new Person("Пётр", "Петров", 31, "Директор"),
-            new Person("Сидор", "Сидоров", 41)
-        };
+       
 
         private IConfiguration Configuration;
+        private IProductData _productsService;
 
-        public MainController(IConfiguration conf)
+        public MainController(IConfiguration conf, IProductData productsService)
         {
             Configuration = conf;
+            _productsService = productsService;
         }
 
 
         public IActionResult Index()
         {
+            ProductFilter filter = new ProductFilter
+            {
+                Limit = 4
+            };
+
+            IEnumerable<ProductViewModel> products = _productsService
+                .GetProducts(filter)
+                .Select(i => new ProductViewModel(i));
+            return View(products);
+        }
+
+       
+
+        public IActionResult Blog()
+        {
             return View();
         }
 
-        public IActionResult Personal()
+        public IActionResult BlogSingle()
         {
-            return View(_persons);
+            return View();
         }
 
-        //Я просто прописываю аргумент в вызове метода, и текст после третьего слеша в url сам становится этим аргументом! чудеса
-        public IActionResult Card(int id)
+        public IActionResult Cart()
         {
-            var checkPers = _persons.Where(i => i.Id == id).ToList();
-            if(checkPers.Count == 0)
-            {
-                return new NotFoundResult();
-            }
-            return View(checkPers.First());
+            return View();
+        }
+
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult ProductDetails()
+        {
+            return View();
+        }
+
+        public IActionResult Shop()
+        {
+            return View();
         }
     }
 }

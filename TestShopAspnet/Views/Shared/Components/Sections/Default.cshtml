@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TestShopAspnet.ViewModels.SectionViewModel>
+
+<div class="panel-group category-products" id="accordian">
+    @foreach (var sec in Model)
+    {
+        if (sec.ChildSections.Count == 0)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                         <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@sec.Id">
+                             @sec.Name
+                        </a>
+                    </h4>
+                </div>
+             </div> 
+        }
+        else
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordian" href="#@sec.GetHashCode()">
+                        <span class="badge pull-right"><i class="fa fa-plus"></i></span>
+                        @sec.Name
+                    </a>
+                    </h4>
+                </div>
+                <div id="@sec.GetHashCode()" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <ul>
+                           @foreach (var child in sec.ChildSections)
+                           {
+                            <li>
+                                <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@child.Id">
+                                    @child.Name
+                                </a>
+                            </li>}
+                        </ul>
+                    </div>
+                </div>
+            </div>          
+        }
+    }
+</div>
