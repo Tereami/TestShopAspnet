@@ -9,31 +9,24 @@ namespace TestShopAspnet.Services
 {
     public class InMemoryPersonsData : IPersonsData
     {
-        private readonly List<Person> _persons = new List<Person>
-        {
-            new Person("Иван", "Иванов", 21, "Инженер"),
-            new Person("Пётр", "Петров", 31, "Директор"),
-            new Person("Сидор", "Сидоров", 41)
-        };
-
         public Person Get(int id)
         {
-            var pers = _persons.SingleOrDefault(p => p.Id == id);
+            var pers = Data.TestData._persons.SingleOrDefault(p => p.Id == id);
             return pers;
         }
 
         public IEnumerable<Person> GetAll()
         {
-            return _persons;
+            return Data.TestData._persons;
         }
 
         public int Add(Person pers)
         {
             if (pers is null) throw new ArgumentNullException(nameof(pers));
 
-            if (_persons.Contains(pers)) return pers.Id;
-            
-            _persons.Add(pers);
+            if (Data.TestData._persons.Contains(pers)) return pers.Id;
+
+            Data.TestData._persons.Add(pers);
             return pers.Id;
         }
 
@@ -41,7 +34,7 @@ namespace TestShopAspnet.Services
         {
             if (pers is null) throw new ArgumentNullException(nameof(pers));
 
-            if (_persons.Contains(pers)) return;
+            if (Data.TestData._persons.Contains(pers)) return;
 
             Person dbPers = Get(pers.Id);
             if (dbPers is null) return;
@@ -57,7 +50,7 @@ namespace TestShopAspnet.Services
         {
             Person dbPers = Get(id);
             if (dbPers is null) return false;
-            return _persons.Remove(dbPers);
+            return Data.TestData._persons.Remove(dbPers);
         }
     }
 }
