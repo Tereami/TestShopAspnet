@@ -7,7 +7,11 @@
         {
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h4 class="panel-title"><a href="#">@sec.Name</a></h4>
+                    <h4 class="panel-title">
+                         <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@sec.Id">
+                             @sec.Name
+                        </a>
+                    </h4>
                 </div>
              </div> 
         }
@@ -28,7 +32,7 @@
                            @foreach (var child in sec.ChildSections)
                            {
                             <li>
-                                <a href="#">
+                                <a asp-controller="Catalog" asp-action="Index" asp-route-SectionId="@child.Id">
                                     @child.Name
                                 </a>
                             </li>}
