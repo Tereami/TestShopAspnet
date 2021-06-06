@@ -1,4 +1,5 @@
 ﻿using DomainModel.Enitities;
+using DomainModel.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,21 @@ namespace TestShopAspnet.Services
         public IEnumerable<Section> GetSections()
         {
             return TestData.Sections;
+        }
+
+        public IEnumerable<Product> GetProducts(ProductFilter filter = null)
+        {
+            IEnumerable<Product> products = TestData.Products;
+
+            if(filter != null)
+            {
+                if(filter.BrandId != null)
+                    products = products.Where(i => i.BrandId == filter.BrandId);
+                if (filter.SectionId != null)
+                    products = products.Where(i => i.SectionId == filter.SectionId);
+            }
+
+            return products;
         }
     }
 }
