@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Runtime;
 using TestShopAspnet.Services.Interfaces;
 using TestShopAspnet.Services;
+using DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestShopAspnet
 {
@@ -26,6 +28,8 @@ namespace TestShopAspnet
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<DB>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
+
             services.AddSingleton<IPersonsData, InMemoryPersonsData>();
 
             services.AddSingleton<IProductData, InMemoryProductData>();
@@ -63,7 +67,6 @@ namespace TestShopAspnet
                     await context.Response.WriteAsync(Configuration["MyMessage"]);
                 });
 
-                //endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
         }
