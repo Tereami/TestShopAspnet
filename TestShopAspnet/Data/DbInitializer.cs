@@ -15,61 +15,91 @@ namespace TestShopAspnet.Data
         public DbInitializer(DB db, ILogger<DbInitializer> Logger)
         {
             _db = db;
+            _logger = Logger;
         }
 
         public void Initialize()
         {
+            _logger.LogInformation("Инициализация БД");
             if (_db.Database.GetPendingMigrations().Any())
             {
+                _logger.LogInformation("Применение миграций");
                 _db.Database.Migrate();
+                _logger.LogInformation("Миграция БД выполнена");
+            }
+            else
+            {
+                _logger.LogInformation("Миграция БД не требуется");
             }
 
             try
             {
                 InitializeProducts();
             }
-            catch
+            catch (Exception e)
             {
-
+                _logger.LogError(e, "Не удалось инициализировать БД");
             }
-
+            _logger.LogInformation("Инициализация БД выполнена");
         }
 
         private void InitializeProducts()
         {
-            if(_db.Products.Any())
+            if (!_db.Sections.Any())
             {
-                return;
+                using (_db.Database.BeginTransaction())
+                {
+                    _logger.LogInformation("Инициализация секций");
+                    _db.Sections.AddRange(TestData.Sections);
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
+                    _db.SaveChanges();
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
+
+                    _db.Database.CommitTransaction();
+                    _logger.LogInformation("Инициализация секций выполнена");
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Инициализация секций не требуется");
             }
 
-            using(_db.Database.BeginTransaction())
+            if (!_db.Brands.Any())
             {
-                _db.Sections.AddRange(TestData.Sections);
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                _db.SaveChanges();
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
+                using (_db.Database.BeginTransaction())
+                {
+                    _logger.LogInformation("Инициализация брендов");
+                    _db.Brands.AddRange(TestData.Brands);
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
+                    _db.SaveChanges();
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
 
-                _db.Database.CommitTransaction();
+                    _db.Database.CommitTransaction();
+                    _logger.LogInformation("Инициализация брендов выполнена");
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Инициализация брендов не требуется");
             }
 
-            using (_db.Database.BeginTransaction())
+            if (!_db.Products.Any())
             {
-                _db.Brands.AddRange(TestData.Brands);
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                _db.SaveChanges();
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
+                using (_db.Database.BeginTransaction())
+                {
+                    _logger.LogInformation("Инициализация товаров");
+                    _db.Products.AddRange(TestData.Products);
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
+                    _db.SaveChanges();
+                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
 
-                _db.Database.CommitTransaction();
+                    _db.Database.CommitTransaction();
+                    _logger.LogInformation("Инициализация товаров выполнена");
+                }
             }
-
-            using (_db.Database.BeginTransaction())
+            else
             {
-                _db.Products.AddRange(TestData.Products);
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
-                _db.SaveChanges();
-                _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
-
-                _db.Database.CommitTransaction();
+                _logger.LogInformation("Инициализация товаров не требуется");
             }
         }
     }

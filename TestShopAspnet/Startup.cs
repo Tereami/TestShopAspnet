@@ -44,7 +44,7 @@ namespace TestShopAspnet
         {
             using (var scope = services.CreateScope())
             {
-                scope.ServiceProvider.GetRequiredService<Data.DbInitializer>();
+                scope.ServiceProvider.GetRequiredService<Data.DbInitializer>().Initialize();
             }
 
             if (env.IsDevelopment())
