@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestShopAspnet.Models;
 using TestShopAspnet.Services.Interfaces;
+using DomainModel.Enitities;
 
 namespace TestShopAspnet.Services.InMemory
 {

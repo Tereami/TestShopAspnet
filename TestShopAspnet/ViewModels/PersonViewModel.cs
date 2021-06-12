@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using TestShopAspnet.Models;
 
 namespace TestShopAspnet.ViewModels
 {
@@ -32,5 +31,17 @@ namespace TestShopAspnet.ViewModels
         [StringLength(50, MinimumLength = 5, ErrorMessage = "От 5 до 50 символов")]
         public string Position { get; set; }
 
+
+
+        public PersonViewModel() { }
+
+        public PersonViewModel (DomainModel.Enitities.Person pers)
+        {
+            Id = pers.Id;
+            Name = pers.Name;
+            Surname = pers.Surname;
+            Age = pers.Age;
+            Position = pers.Position;
+        }
     }
 }
