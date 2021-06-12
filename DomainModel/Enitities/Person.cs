@@ -4,19 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DomainModel.Enitities.Base;
+using DomainModel.Enitities.Base.Interfaces;
 
 
 namespace DomainModel.Enitities
 {
-    public class Person
+    public class Person : NamedEntity
     {
-        [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
         public string Surname { get; set; }
         public int Age { get; set; }
         public string Position { get; set; }
 
+        public Person() { }
 
         public Person(string name, string surname, int age, string pos = "Нет информации...")
         {
