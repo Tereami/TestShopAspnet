@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestShopAspnet.Models;
 
 namespace TestShopAspnet.Data
 {
@@ -13,7 +12,9 @@ namespace TestShopAspnet.Data
         {
             new Person("Иван", "Иванов", 21, "Инженер"),
             new Person("Пётр", "Петров", 31, "Директор"),
-            new Person("Сидор", "Сидоров", 41)
+            new Person("Сидор", "Сидоров", 41),
+            new Person("Василий", "Васильев", 51, "Продавец"),
+            new Person("Александр", "Александров", 61, "Продавец")
         };
 
         public static IEnumerable<Section> Sections { get; } = new[]

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TestShopAspnet.Models.Person>
+﻿@model IEnumerable<TestShopAspnet.ViewModels.PersonViewModel>
 
 @{
     ViewData["Title"] = "Все сотрудники";
@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (TestShopAspnet.Models.Person person in Model)
+            @foreach (TestShopAspnet.ViewModels.PersonViewModel person in Model)
             {
                 <tr>
                     <td>@person.Id</td>

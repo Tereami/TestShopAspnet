@@ -16,6 +16,8 @@ namespace DataAccessLayer.Context
 
         public DbSet<Brand> Brands { get; set; }
 
+        public DbSet<Person> Persons { get; set; }
+
         public DB(DbContextOptions<DB> options) : base(options)
         {
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DomainModel.Enitities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestShopAspnet.Models;
 using TestShopAspnet.Services.Interfaces;
 using TestShopAspnet.ViewModels;
 
@@ -21,7 +21,9 @@ namespace TestShopAspnet.Controllers
 
         public IActionResult Index()
         {
-            return View(_personsService.GetAll());
+            var personsViewModels = _personsService.GetAll()
+                .Select(i => new PersonViewModel(i));
+            return View(personsViewModels);
         }
 
         public IActionResult Info(int id)
@@ -44,14 +46,8 @@ namespace TestShopAspnet.Controllers
             Person checkPers = _personsService.Get(id);
             if (checkPers == null)            
                 return new NotFoundResult();
-            PersonViewModel persvm = new PersonViewModel()
-            {
-                Id = checkPers.Id,
-                Name = checkPers.Name,
-                Surname = checkPers.Surname,
-                Age = checkPers.Age,
-                Position = checkPers.Position
-            };
+            PersonViewModel persvm = new PersonViewModel(checkPers);
+
             return View(persvm);
         }
 
@@ -82,14 +78,8 @@ namespace TestShopAspnet.Controllers
             if (checkPers is null)
                 return NotFound();
 
-            PersonViewModel persvm = new PersonViewModel()
-            {
-                Id = checkPers.Id,
-                Name = checkPers.Name,
-                Surname = checkPers.Surname,
-                Age = checkPers.Age,
-                Position = checkPers.Position
-            };
+            PersonViewModel persvm = new PersonViewModel(checkPers);
+            
             return View(persvm);
         }
 
