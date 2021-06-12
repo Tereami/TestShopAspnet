@@ -10,7 +10,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.Runtime;
 using TestShopAspnet.Services.Interfaces;
-using TestShopAspnet.Services;
+using TestShopAspnet.Services.InMemory;
+using TestShopAspnet.Services.InSQL;
 using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,7 @@ namespace TestShopAspnet
 
             services.AddSingleton<IPersonsData, InMemoryPersonsData>();
 
-            services.AddSingleton<IProductData, InMemoryProductData>();
+            services.AddScoped<IProductData, InSqlProductData>();
 
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();

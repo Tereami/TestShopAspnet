@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using TestShopAspnet.Models;
 using TestShopAspnet.Services.Interfaces;
 
-namespace TestShopAspnet.Services
+namespace TestShopAspnet.Services.InMemory
 {
     public class InMemoryPersonsData : IPersonsData
     {

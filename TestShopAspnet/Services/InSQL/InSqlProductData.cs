@@ -4,30 +4,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TestShopAspnet.Data;
 using TestShopAspnet.Services.Interfaces;
+using DataAccessLayer.Context;
 
-namespace TestShopAspnet.Services
+namespace TestShopAspnet.Services.InSQL
 {
-    public class InMemoryProductData : IProductData
+    public class InSqlProductData : IProductData
     {
+        private readonly DB _db;
+
+        public InSqlProductData(DB db)
+        {
+            _db = db;
+        }
+
         public IEnumerable<Brand> GetBrands()
         {
-            return TestData.Brands;
+            return _db.Brands;
         }
 
         public IEnumerable<Section> GetSections()
         {
-            return TestData.Sections;
+            return _db.Sections;
         }
 
         public IEnumerable<Product> GetProducts(ProductFilter filter = null)
         {
-            IEnumerable<Product> products = TestData.Products;
+            IQueryable<Product> products = _db.Products;
 
-            if(filter != null)
+            if (filter != null)
             {
-                if(filter.BrandId != null)
+                if (filter.BrandId != null)
                     products = products.Where(i => i.BrandId == filter.BrandId);
                 if (filter.SectionId != null)
                     products = products.Where(i => i.SectionId == filter.SectionId);
