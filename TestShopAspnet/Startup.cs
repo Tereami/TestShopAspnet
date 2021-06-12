@@ -29,6 +29,7 @@ namespace TestShopAspnet
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DB>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
+            services.AddTransient<Data.DbInitializer>();
 
             services.AddSingleton<IPersonsData, InMemoryPersonsData>();
 
@@ -39,8 +40,13 @@ namespace TestShopAspnet
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider services)
         {
+            using (var scope = services.CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<Data.DbInitializer>();
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
