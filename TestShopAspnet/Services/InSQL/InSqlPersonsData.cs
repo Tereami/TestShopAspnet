@@ -55,7 +55,7 @@ namespace TestShopAspnet.Services.InSQL
         {
             if (pers is null) throw new ArgumentNullException(nameof(pers));
 
-            if (_db.Persons.Contains(pers)) return;
+            //if (_db.Persons.Contains(pers)) return;
 
             Person dbPers = Get(pers.Id);
             if (dbPers is null) return;

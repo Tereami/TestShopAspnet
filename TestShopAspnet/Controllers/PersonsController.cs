@@ -21,7 +21,9 @@ namespace TestShopAspnet.Controllers
 
         public IActionResult Index()
         {
-            return View(_personsService.GetAll());
+            var personsViewModels = _personsService.GetAll()
+                .Select(i => new PersonViewModel(i));
+            return View(personsViewModels);
         }
 
         public IActionResult Info(int id)
