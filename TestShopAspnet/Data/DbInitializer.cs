@@ -101,6 +101,24 @@ namespace TestShopAspnet.Data
             {
                 _logger.LogInformation("Инициализация товаров не требуется");
             }
+
+
+            if (!_db.Persons.Any())
+            {
+                using (_db.Database.BeginTransaction())
+                {
+                    _logger.LogInformation("Инициализация сотрудников");
+                    _db.Persons.AddRange(TestData._persons);
+                    _db.SaveChanges();
+                    //для сотрудников id вручную не задается, поэтому IDENTITY_INSERT трогать не надо
+                    _db.Database.CommitTransaction();
+                    _logger.LogInformation("Инициализация сотрудников выполнена");
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Инициализация сотрудников не требуется");
+            }
         }
     }
 }

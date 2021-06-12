@@ -32,7 +32,7 @@ namespace TestShopAspnet
             services.AddDbContext<DB>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
             services.AddTransient<Data.DbInitializer>();
 
-            services.AddSingleton<IPersonsData, InSqlPersonsData>();
+            services.AddScoped<IPersonsData, InSqlPersonsData>();
 
             services.AddScoped<IProductData, InSqlProductData>();
 
