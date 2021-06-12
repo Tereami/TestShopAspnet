@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,5 +13,10 @@ namespace DomainModel.Enitities
     {
         public int Order { get; set; }
         public int? ParentId { get; set; }
+
+        [ForeignKey(nameof(ParentId))]
+        public Section Parent { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

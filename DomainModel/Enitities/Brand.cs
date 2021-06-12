@@ -11,5 +11,7 @@ namespace DomainModel.Enitities
     public class Brand : NamedEntity, IOrderedEntity
     {
         public int Order { get; set; }
+
+        public ICollection<Product> Products { get; set; }
     }
 }

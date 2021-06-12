@@ -22,5 +22,7 @@ namespace TestShopAspnet
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
             return builder;
         }
+
+
     }
 }
