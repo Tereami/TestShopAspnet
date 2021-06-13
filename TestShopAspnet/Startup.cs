@@ -105,7 +105,7 @@ namespace TestShopAspnet
 #endif
 
             opt.Password.RequireNonAlphanumeric = false;
-            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
 
             opt.Lockout.AllowedForNewUsers = false; //не блокировать новых юзеров
             opt.Lockout.MaxFailedAccessAttempts = 10; //блокриовать учетку после 10 неудачных ввода пароля

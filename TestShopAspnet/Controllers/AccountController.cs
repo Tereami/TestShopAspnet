@@ -40,7 +40,7 @@ namespace TestShopAspnet.Controllers
             {
                 await _SignInManager.SignInAsync(user, false); //временный вход без пароля
 
-                RedirectToAction("Index", "Main");
+                return RedirectToAction("Index", "Main");
             }
 
             foreach(IdentityError error in registerResult.Errors)
@@ -80,7 +80,10 @@ namespace TestShopAspnet.Controllers
 
             if(loginResult.Succeeded)
             {
-                LocalRedirect(model.ReturnUrl);
+                if (model.ReturnUrl is null)
+                    model.ReturnUrl = "/";
+
+                return LocalRedirect(model.ReturnUrl);
             }
 
             ModelState.AddModelError("", "Неверный логин или пароль");
@@ -89,7 +92,11 @@ namespace TestShopAspnet.Controllers
 
         #endregion
 
-        public IActionResult Logout() => RedirectToAction("Index", "Main");
+        public async Task<IActionResult> Logout()
+        {
+            await _SignInManager.SignOutAsync();
+            return RedirectToAction("Index", "Main");
+        }
 
         public IActionResult AccessDenied() => View();
     }
