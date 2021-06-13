@@ -34,7 +34,11 @@ namespace TestShopAspnet.Controllers
             IEnumerable<ProductViewModel> products = _productsService
                 .GetProducts(filter)
                 .Select(i => new ProductViewModel(i));
-            return View(products);
+
+            ViewData["Products"] = products;
+            //ViewBag.Products = products; //будет работать и так тоже
+
+            return View();
         }
 
        

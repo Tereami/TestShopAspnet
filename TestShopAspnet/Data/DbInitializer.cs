@@ -90,7 +90,6 @@ namespace TestShopAspnet.Data
                 _db.Brands.AddRange(TestData.Brands);
                 _db.Products.AddRange(TestData.Products);
                 _db.SaveChanges();
-
                 _db.Database.CommitTransaction();
                 _logger.LogInformation("Инициализация бд выполнена");
             }
