@@ -14,6 +14,9 @@ using TestShopAspnet.Services.InMemory;
 using TestShopAspnet.Services.InSQL;
 using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
+using DomainModel.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TestShopAspnet
 {
@@ -31,6 +34,44 @@ namespace TestShopAspnet
         {
             services.AddDbContext<DB>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
             services.AddTransient<Data.DbInitializer>();
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<DB>()
+                .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(opt =>
+            {
+#if DEBUG
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+
+                opt.Lockout.AllowedForNewUsers = false; //не блокировать новых юзеров
+                opt.Lockout.MaxFailedAccessAttempts = 10; //блокриовать учетку после 10 неудачных ввода пароля
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //...на 15 минут
+
+                opt.User.RequireUniqueEmail = false; // а вот это не понял зачем
+            }
+            );
+
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "TestShopAspNet";
+                opt.Cookie.HttpOnly = true; //для повышения безопасности
+                opt.ExpireTimeSpan = TimeSpan.FromDays(10); //хранить куки не более 10 дней
+
+                opt.LoginPath = "/Account/Login"; //контроллер у меня будет называться Account
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+
+                opt.SlidingExpiration = true; //выдать новые коки после авторизации
+            }
+            );
 
             services.AddScoped<IPersonsData, InSqlPersonsData>();
 
@@ -55,6 +96,9 @@ namespace TestShopAspnet
 
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.Use(
               async (context, next) =>

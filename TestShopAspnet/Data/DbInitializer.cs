@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccessLayer.Context;
+using DomainModel.Enitities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -37,6 +38,7 @@ namespace TestShopAspnet.Data
             try
             {
                 InitializeProducts();
+                InitializePersons();
             }
             catch (Exception e)
             {
@@ -47,64 +49,54 @@ namespace TestShopAspnet.Data
 
         private void InitializeProducts()
         {
-            if (!_db.Sections.Any())
-            {
-                using (_db.Database.BeginTransaction())
-                {
-                    _logger.LogInformation("Инициализация секций");
-                    _db.Sections.AddRange(TestData.Sections);
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] ON");
-                    _db.SaveChanges();
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Sections] OFF");
-
-                    _db.Database.CommitTransaction();
-                    _logger.LogInformation("Инициализация секций выполнена");
-                }
-            }
-            else
-            {
-                _logger.LogInformation("Инициализация секций не требуется");
-            }
-
-            if (!_db.Brands.Any())
-            {
-                using (_db.Database.BeginTransaction())
-                {
-                    _logger.LogInformation("Инициализация брендов");
-                    _db.Brands.AddRange(TestData.Brands);
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] ON");
-                    _db.SaveChanges();
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Brands] OFF");
-
-                    _db.Database.CommitTransaction();
-                    _logger.LogInformation("Инициализация брендов выполнена");
-                }
-            }
-            else
-            {
-                _logger.LogInformation("Инициализация брендов не требуется");
-            }
-
-            if (!_db.Products.Any())
-            {
-                using (_db.Database.BeginTransaction())
-                {
-                    _logger.LogInformation("Инициализация товаров");
-                    _db.Products.AddRange(TestData.Products);
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] ON");
-                    _db.SaveChanges();
-                    _db.Database.ExecuteSqlRaw("SET IDENTITY_INSERT [dbo].[Products] OFF");
-
-                    _db.Database.CommitTransaction();
-                    _logger.LogInformation("Инициализация товаров выполнена");
-                }
-            }
-            else
+            if (_db.Products.Any())
             {
                 _logger.LogInformation("Инициализация товаров не требуется");
+                return;
             }
 
+            Dictionary<int, Section> sectionsPool = TestData.Sections.ToDictionary(s => s.Id);
+            Dictionary<int, Brand> brandsPool = TestData.Brands.ToDictionary(b => b.Id);
 
+            foreach (Section s in TestData.Sections)
+            {
+                if (s.ParentId == null) continue;
+                s.Parent = sectionsPool[(int)s.ParentId];
+            }
+
+            foreach (Product p in TestData.Products)
+            {
+                p.Section = sectionsPool[p.SectionId];
+                if (!(p.BrandId is null))
+                    p.Brand = brandsPool[(int)p.BrandId];
+                p.Id = 0;
+                p.BrandId = null;
+                p.SectionId = 0;
+            }
+
+            foreach (Section s in TestData.Sections)
+            {
+                s.Id = 0;
+                s.ParentId = null;
+            }
+            foreach (Brand b in TestData.Brands)
+                b.Id = 0;
+
+
+            using (_db.Database.BeginTransaction())
+            {
+                _logger.LogInformation("Инициализация бд");
+                _db.Sections.AddRange(TestData.Sections);
+                _db.Brands.AddRange(TestData.Brands);
+                _db.Products.AddRange(TestData.Products);
+                _db.SaveChanges();
+                _db.Database.CommitTransaction();
+                _logger.LogInformation("Инициализация бд выполнена");
+            }
+        }
+
+        private void InitializePersons()
+        {
             if (!_db.Persons.Any())
             {
                 using (_db.Database.BeginTransaction())
