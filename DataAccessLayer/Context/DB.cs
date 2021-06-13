@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using DomainModel.Enitities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using DomainModel.Identity;
 
 namespace DataAccessLayer.Context
 {
-    public class DB : DbContext
+    public class DB : IdentityDbContext<User, Role, string>
     {
         public DbSet<Product> Products { get; set; }
 

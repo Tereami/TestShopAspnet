@@ -14,6 +14,9 @@ using TestShopAspnet.Services.InMemory;
 using TestShopAspnet.Services.InSQL;
 using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
+using DomainModel.Identity;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TestShopAspnet
 {
@@ -31,6 +34,12 @@ namespace TestShopAspnet
         {
             services.AddDbContext<DB>(opt => opt.UseSqlServer(Configuration.GetConnectionString("MSSQL")));
             services.AddTransient<Data.DbInitializer>();
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<DB>()
+                .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(opt => GetIdentityOptions());
+            services.ConfigureApplicationCookie(opt => GetIdentityCookieOptions());
 
             services.AddScoped<IPersonsData, InSqlPersonsData>();
 
@@ -56,6 +65,9 @@ namespace TestShopAspnet
             app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.Use(
               async (context, next) =>
               {
@@ -76,6 +88,47 @@ namespace TestShopAspnet
 
                 endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
+        }
+
+
+        private IdentityOptions GetIdentityOptions()
+        {
+            IdentityOptions opt = new IdentityOptions();
+
+            //на время разработки упрощу требования паролю
+#if DEBUG
+            opt.Password.RequireDigit = false;
+            opt.Password.RequiredLength = 3;
+            opt.Password.RequireLowercase = false;
+            opt.Password.RequireUppercase = false;
+            opt.Password.RequiredUniqueChars = 3;
+#endif
+
+            opt.Password.RequireNonAlphanumeric = false;
+            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
+
+            opt.Lockout.AllowedForNewUsers = false; //не блокировать новых юзеров
+            opt.Lockout.MaxFailedAccessAttempts = 10; //блокриовать учетку после 10 неудачных ввода пароля
+            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //...на 15 минут
+
+            opt.User.RequireUniqueEmail = false; // а вот это не понял зачем
+            return opt;
+        }
+
+        private CookieAuthenticationOptions GetIdentityCookieOptions()
+        {
+            CookieAuthenticationOptions opt = new CookieAuthenticationOptions();
+            opt.Cookie.Name = "TestShopAspNet";
+            opt.Cookie.HttpOnly = true; //для повышения безопасности
+            opt.ExpireTimeSpan = TimeSpan.FromDays(10); //хранить куки не более 10 дней
+
+            opt.LoginPath = "/Account/Login";
+            opt.LogoutPath = "/Account/Logout";
+            opt.AccessDeniedPath = "/Account/AccessDenied";
+
+            opt.SlidingExpiration = true; //выдать новые коки после авторизации
+
+            return opt;
         }
     }
 }
