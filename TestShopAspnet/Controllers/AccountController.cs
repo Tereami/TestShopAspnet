@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace TestShopAspnet.Controllers
 {
@@ -13,11 +14,16 @@ namespace TestShopAspnet.Controllers
     {
         private readonly UserManager<User> _UserManager;
         private readonly SignInManager<User> _SignInManager;
+        private readonly ILogger<AccountController> _Logger;
 
-        public AccountController(UserManager<User> UserManager, SignInManager<User> SignInManager)
+        public AccountController(
+            UserManager<User> UserManager, 
+            SignInManager<User> SignInManager,
+            ILogger<AccountController> Logger)
         {
             _UserManager = UserManager;
             _SignInManager = SignInManager;
+            _Logger = Logger;
         }
 
         #region Register
@@ -39,7 +45,7 @@ namespace TestShopAspnet.Controllers
             if(registerResult.Succeeded)
             {
                 await _SignInManager.SignInAsync(user, false); //временный вход без пароля
-
+                _Logger.LogInformation("Зарегистрирован пользователь {0}", model.Username);
                 return RedirectToAction("Index", "Main");
             }
 
@@ -47,6 +53,9 @@ namespace TestShopAspnet.Controllers
             {
                 ModelState.AddModelError("", error.Description);
             }
+            _Logger.LogWarning("Ошибка при регистрации пользователя {0}: {1}", 
+                model.Username,
+                string.Join(",", registerResult.Errors.Select(err => err.Description)));
             return View(model);
         }
 
@@ -83,10 +92,12 @@ namespace TestShopAspnet.Controllers
                 if (model.ReturnUrl is null)
                     model.ReturnUrl = "/";
 
+                _Logger.LogInformation("Успешный вход пользователя {0}", model.Username);
                 return LocalRedirect(model.ReturnUrl);
             }
 
             ModelState.AddModelError("", "Неверный логин или пароль");
+            _Logger.LogWarning("Не удалось войти");
             return View(model);
         }
 
@@ -95,6 +106,8 @@ namespace TestShopAspnet.Controllers
         public async Task<IActionResult> Logout()
         {
             await _SignInManager.SignOutAsync();
+
+            _Logger.LogInformation("Выход пользователя");
             return RedirectToAction("Index", "Main");
         }
 
