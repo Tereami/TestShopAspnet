@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using DataAccessLayer.Context;
@@ -21,11 +22,12 @@ namespace TestShopAspnet.Data
         public void Initialize()
         {
             _logger.LogInformation("Инициализация БД");
+            System.Diagnostics.Stopwatch timer = Stopwatch.StartNew();
             if (_db.Database.GetPendingMigrations().Any())
             {
                 _logger.LogInformation("Применение миграций");
                 _db.Database.Migrate();
-                _logger.LogInformation("Миграция БД выполнена");
+                _logger.LogInformation("Миграция БД выполнена, прошло {0} секунд", timer.Elapsed.TotalSeconds);
             }
             else
             {
@@ -40,7 +42,7 @@ namespace TestShopAspnet.Data
             {
                 _logger.LogError(e, "Не удалось инициализировать БД");
             }
-            _logger.LogInformation("Инициализация БД выполнена");
+            _logger.LogInformation("Инициализация БД выполнена, прошло {0} секунд", timer.Elapsed.TotalSeconds);
         }
 
         private void InitializeProducts()
