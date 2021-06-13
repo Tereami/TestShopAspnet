@@ -122,7 +122,7 @@ namespace TestShopAspnet
             opt.Cookie.HttpOnly = true; //для повышения безопасности
             opt.ExpireTimeSpan = TimeSpan.FromDays(10); //хранить куки не более 10 дней
 
-            opt.LoginPath = "/Account/Login";
+            opt.LoginPath = "/Account/Login"; //контроллер у меня будет называться Account
             opt.LogoutPath = "/Account/Logout";
             opt.AccessDeniedPath = "/Account/AccessDenied";
 
