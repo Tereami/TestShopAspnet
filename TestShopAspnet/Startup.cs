@@ -38,8 +38,40 @@ namespace TestShopAspnet
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<DB>()
                 .AddDefaultTokenProviders();
-            services.Configure<IdentityOptions>(opt => GetIdentityOptions());
-            services.ConfigureApplicationCookie(opt => GetIdentityCookieOptions());
+            services.Configure<IdentityOptions>(opt =>
+            {
+#if DEBUG
+                opt.Password.RequireDigit = false;
+                opt.Password.RequiredLength = 3;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequiredUniqueChars = 3;
+#endif
+
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
+
+                opt.Lockout.AllowedForNewUsers = false; //не блокировать новых юзеров
+                opt.Lockout.MaxFailedAccessAttempts = 10; //блокриовать учетку после 10 неудачных ввода пароля
+                opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //...на 15 минут
+
+                opt.User.RequireUniqueEmail = false; // а вот это не понял зачем
+            }
+            );
+
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.Name = "TestShopAspNet";
+                opt.Cookie.HttpOnly = true; //для повышения безопасности
+                opt.ExpireTimeSpan = TimeSpan.FromDays(10); //хранить куки не более 10 дней
+
+                opt.LoginPath = "/Account/Login"; //контроллер у меня будет называться Account
+                opt.LogoutPath = "/Account/Logout";
+                opt.AccessDeniedPath = "/Account/AccessDenied";
+
+                opt.SlidingExpiration = true; //выдать новые коки после авторизации
+            }
+            );
 
             services.AddScoped<IPersonsData, InSqlPersonsData>();
 
@@ -88,47 +120,6 @@ namespace TestShopAspnet
 
                 endpoints.MapControllerRoute("default", "{controller=Main}/{action=Index}/{id?}");
             });
-        }
-
-
-        private IdentityOptions GetIdentityOptions()
-        {
-            IdentityOptions opt = new IdentityOptions();
-
-            //на время разработки упрощу требования паролю
-#if DEBUG
-            opt.Password.RequireDigit = false;
-            opt.Password.RequiredLength = 3;
-            opt.Password.RequireLowercase = false;
-            opt.Password.RequireUppercase = false;
-            opt.Password.RequiredUniqueChars = 3;
-#endif
-
-            opt.Password.RequireNonAlphanumeric = false;
-            opt.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-_";
-
-            opt.Lockout.AllowedForNewUsers = false; //не блокировать новых юзеров
-            opt.Lockout.MaxFailedAccessAttempts = 10; //блокриовать учетку после 10 неудачных ввода пароля
-            opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //...на 15 минут
-
-            opt.User.RequireUniqueEmail = false; // а вот это не понял зачем
-            return opt;
-        }
-
-        private CookieAuthenticationOptions GetIdentityCookieOptions()
-        {
-            CookieAuthenticationOptions opt = new CookieAuthenticationOptions();
-            opt.Cookie.Name = "TestShopAspNet";
-            opt.Cookie.HttpOnly = true; //для повышения безопасности
-            opt.ExpireTimeSpan = TimeSpan.FromDays(10); //хранить куки не более 10 дней
-
-            opt.LoginPath = "/Account/Login"; //контроллер у меня будет называться Account
-            opt.LogoutPath = "/Account/Logout";
-            opt.AccessDeniedPath = "/Account/AccessDenied";
-
-            opt.SlidingExpiration = true; //выдать новые коки после авторизации
-
-            return opt;
         }
     }
 }
