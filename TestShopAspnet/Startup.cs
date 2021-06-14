@@ -18,6 +18,7 @@ using DomainModel.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
+
 namespace TestShopAspnet
 {
     public class Startup
@@ -76,6 +77,8 @@ namespace TestShopAspnet
             services.AddScoped<IPersonsData, InSqlPersonsData>();
 
             services.AddScoped<IProductData, InSqlProductData>();
+
+            services.AddScoped<ICartService, Services.InCookies.InCookiesCartService>();
 
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();

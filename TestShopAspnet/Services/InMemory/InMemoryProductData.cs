@@ -42,5 +42,10 @@ namespace TestShopAspnet.Services.InMemory
 
             return products;
         }
+
+        public Product GetProductById(int id)
+        {
+            return TestData.Products.FirstOrDefault(p => p.Id == id);
+        }
     }
 }

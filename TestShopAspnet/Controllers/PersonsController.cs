@@ -7,9 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestShopAspnet.Services.Interfaces;
 using TestShopAspnet.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using DomainModel.Identity;
 
 namespace TestShopAspnet.Controllers
 {
+    [Authorize]
     public class PersonsController : Controller
     {
         private IPersonsData _personsService;
@@ -42,12 +45,14 @@ namespace TestShopAspnet.Controllers
             return View(checkPers);
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Create()
         {
             _logger.LogInformation("Запрос на добавление сотрудника");
             return View("Edit", new PersonViewModel());
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(int id)
         {
             _logger.LogInformation("Запрос на редактирование сотрудника id{0}", id);
@@ -64,6 +69,7 @@ namespace TestShopAspnet.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Edit(PersonViewModel vm)
         {
             _logger.LogInformation("Редактирование сотрудника id{0}", vm.Id);
@@ -93,6 +99,7 @@ namespace TestShopAspnet.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult Delete(int id)
         {
             _logger.LogInformation("Запрос на удаление сотрудника id{0}", id);
@@ -112,6 +119,7 @@ namespace TestShopAspnet.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Role.Administrators)]
         public IActionResult DeleteConfirm(int id)
         {
             _personsService.Delete(id);

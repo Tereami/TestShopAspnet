@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TestShopAspnet.ViewModels.PersonViewModel>
+﻿@using DomainModel.Identity;
+@model IEnumerable<TestShopAspnet.ViewModels.PersonViewModel>
 
 @{
     ViewData["Title"] = "Все сотрудники";
@@ -7,9 +8,12 @@
 <div class="container">
     <h2>Сотрудники магазина</h2>
     <hr />
-    <p>
-        <a asp-action="Create" class="btn btn-default">Создать</a>
-    </p>
+    @if (User.IsInRole(Role.Administrators))
+    {
+        <p>
+            <a asp-action="Create" class="btn btn-default">Создать</a>
+        </p>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -18,7 +22,10 @@
                 <th>Фамилия</th>
                 <th>Возраст</th>
                 <th></th>
-                <th></th>
+                @if (User.IsInRole(Role.Administrators))
+                {
+                    <th></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -30,11 +37,15 @@
                     <td>@person.Surname</td>
                     <td>@person.Age</td>
                     <td><a asp-action="Info" asp-route-id="@person.Id">Подробнее</a></td>
-                    <td>
-                        <form asp-action="DeleteConfirm" asp-route-id="@person.Id">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+
+                    @if (User.IsInRole(Role.Administrators))
+                    {
+                        <td>
+                            <form asp-action="DeleteConfirm" asp-route-id="@person.Id">
+                                <button type="submit">Delete</button>
+                            </form>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

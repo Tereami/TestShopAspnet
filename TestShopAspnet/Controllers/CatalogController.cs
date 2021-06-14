@@ -43,6 +43,14 @@ namespace TestShopAspnet.Controllers
             return View(catVm);
         }
 
-        
+        public IActionResult Details(int Id)
+        {
+            Product p = _service.GetProductById(Id);
+            if (p is null)
+                return NotFound();
+
+            ProductViewModel vm = new ProductViewModel(p);
+            return View(vm);
+        }
     }
 }
