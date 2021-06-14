@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TestShopAspnet.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _UserManager;
@@ -28,8 +30,10 @@ namespace TestShopAspnet.Controllers
 
         #region Register
 
+        [AllowAnonymous]
         public IActionResult Register() => View(new RegisterUserViewModel());
 
+        [AllowAnonymous]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterUserViewModel model)
         {
@@ -69,6 +73,7 @@ namespace TestShopAspnet.Controllers
 
         #region Login
 
+        [AllowAnonymous]
         public IActionResult Login(string ReturnUrl)
         {
             LoginViewModel model = new LoginViewModel
@@ -79,6 +84,7 @@ namespace TestShopAspnet.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -117,6 +123,7 @@ namespace TestShopAspnet.Controllers
             return RedirectToAction("Index", "Main");
         }
 
+        [AllowAnonymous]
         public IActionResult AccessDenied() => View();
     }
 }
