@@ -44,8 +44,14 @@ namespace TestShopAspnet.Controllers
             IdentityResult registerResult = await _UserManager.CreateAsync(user, model.Password);
             if(registerResult.Succeeded)
             {
-                await _SignInManager.SignInAsync(user, false); //временный вход без пароля
                 _Logger.LogInformation("Зарегистрирован пользователь {0}", model.Username);
+                await _UserManager.AddToRoleAsync(user, Role.Users);
+                _Logger.LogInformation("Пользователю {0} назначена роль {1}", model.Username, Role.Users);
+
+                await _SignInManager.SignInAsync(user, false); //временный вход без пароля
+
+                _Logger.LogInformation("Пользователь {0} автоматически вошел в систему после регистрации", model.Username);
+
                 return RedirectToAction("Index", "Main");
             }
 
