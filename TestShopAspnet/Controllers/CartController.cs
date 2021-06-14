@@ -20,5 +20,29 @@ namespace TestShopAspnet.Controllers
         {
             return View(_cartService.GetViewModel());
         }
+
+        public IActionResult Add(int id)
+        {
+            _cartService.Add(id);
+            return RedirectToAction("Index", "Cart");
+        }
+
+        public IActionResult Remove(int id)
+        {
+            _cartService.Remove(id);
+            return RedirectToAction("Index", "Cart");
+        }
+
+        public IActionResult Decrement(int id)
+        {
+            _cartService.Decrement(id);
+            return RedirectToAction("Index", "Cart");
+        }
+
+        public IActionResult Clear()
+        {
+            _cartService.Clear();
+            return RedirectToAction("Index", "Cart");
+        }
     }
 }
