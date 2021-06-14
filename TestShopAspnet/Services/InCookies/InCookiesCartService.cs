@@ -70,7 +70,7 @@ namespace TestShopAspnet.Services.InCookies
             CartItem item = Cart.Items.FirstOrDefault(i => i.ProductId == id);
             if(item == null)
             {
-                cart.Items.Add(new CartItem { ProductId = id, Quantity = 1 });
+                cart.Items.Add(new CartItem { ProductId = id });
             }
             else
             {
@@ -80,7 +80,7 @@ namespace TestShopAspnet.Services.InCookies
             Cart = cart;
         }
 
-        public void Clear(int id)
+        public void Clear()
         {
             Cart cart = Cart;
             cart.Items.Clear();
@@ -98,7 +98,7 @@ namespace TestShopAspnet.Services.InCookies
                 item.Quantity--;
 
             if (item.Quantity <= 0)
-                cart.Items.Remove(item);
+                cart.Items = cart.Items.Where(i => i.ProductId != id).ToList();
 
             Cart = cart;
         }
@@ -110,7 +110,8 @@ namespace TestShopAspnet.Services.InCookies
             CartItem item = Cart.Items.FirstOrDefault(i => i.ProductId == id);
             if (item == null) return;
 
-            cart.Items.Remove(item);
+            //bool removeResult = cart.Items.Remove(item); //не работает!
+            cart.Items = cart.Items.Where(i => i.ProductId != id).ToList();
 
             Cart = cart;
         }

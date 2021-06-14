@@ -17,7 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using DomainModel.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using 
+
 
 namespace TestShopAspnet
 {
