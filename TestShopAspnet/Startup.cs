@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using DomainModel.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using 
 
 namespace TestShopAspnet
 {
@@ -76,6 +77,8 @@ namespace TestShopAspnet
             services.AddScoped<IPersonsData, InSqlPersonsData>();
 
             services.AddScoped<IProductData, InSqlProductData>();
+
+            services.AddScoped<ICartService, Services.InCookies.InCookiesCartService>();
 
             services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
