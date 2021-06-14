@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TestShopAspnet.Services.Interfaces;
 using TestShopAspnet.ViewModels;
 using DomainModel.Enitities;
+using DomainModel.Filters;
 using Newtonsoft.Json;
 
 namespace TestShopAspnet.Services.InCookies
@@ -116,7 +117,23 @@ namespace TestShopAspnet.Services.InCookies
 
         public CartViewModel GetViewModel()
         {
+            ProductFilter filter = new ProductFilter
+            {
+                Ids = Cart.Items.Select(i => i.ProductId).ToArray()
+            };
+            IEnumerable<Product> products = _productData.GetProducts(filter);
 
+            Dictionary<int, ProductViewModel> viewModels = products
+                .Select(p => new ProductViewModel(p))
+                .ToDictionary(p => p.Id);
+
+            CartViewModel cartVm = new CartViewModel
+            {
+                Items = Cart.Items
+                .Where(i => viewModels.ContainsKey(i.ProductId))
+                .Select(i => (viewModels[i.ProductId], i.Quantity))
+            };
+            return cartVm;
         }
     }
 }
