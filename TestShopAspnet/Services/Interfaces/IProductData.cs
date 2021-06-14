@@ -14,5 +14,7 @@ namespace TestShopAspnet.Services.Interfaces
         IEnumerable<Section> GetSections();
 
         IEnumerable<Product> GetProducts(ProductFilter filter = null);
+
+        Product GetProductById(int id);
     }
 }

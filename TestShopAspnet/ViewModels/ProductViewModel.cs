@@ -16,6 +16,10 @@ namespace TestShopAspnet.ViewModels
 
         public string ImageName { get; set; }
 
+        public string BrandName { get; set; }
+
+        public string SectionName{ get; set; }
+
         public ProductViewModel()
         {
 
@@ -27,6 +31,8 @@ namespace TestShopAspnet.ViewModels
             Name = p.Name;
             Price = p.Price;
             ImageName = p.ImageName;
+            BrandName = p.Brand?.Name;
+            SectionName = p.Section.Name;
         }
     }
 }

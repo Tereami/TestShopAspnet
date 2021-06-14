@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestShopAspnet.Services.Interfaces;
 using DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace TestShopAspnet.Services.InSQL
 {
@@ -30,7 +31,9 @@ namespace TestShopAspnet.Services.InSQL
 
         public IEnumerable<Product> GetProducts(ProductFilter filter = null)
         {
-            IQueryable<Product> products = _db.Products;
+            IQueryable<Product> products = _db.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Section);
 
             if (filter != null)
             {
@@ -48,6 +51,14 @@ namespace TestShopAspnet.Services.InSQL
             products = products.OrderBy(i => i.Order);
 
             return products;
+        }
+
+        public Product GetProductById(int id)
+        {
+            return _db.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Section)
+                .FirstOrDefault(p => p.Id == id);
         }
     }
 }
